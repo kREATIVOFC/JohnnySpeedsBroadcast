@@ -1,1 +1,405 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://use.typekit.net/wba5zng.css">
+<title>Johnny Speeds Overlay</title>
 
+<style>
+body{
+  margin:0;
+  padding:0;
+  width:1920px;
+  height:1080px;
+  background:transparent;
+  overflow:hidden;
+}
+
+/* ====== BAKGRUND ====== */
+#bg{
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  object-fit:cover;
+}
+
+/* ====== LOGOTYPER ====== */
+#teams-section{
+  position:absolute;
+  bottom:30px;
+  left:40px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  z-index:10;
+}
+
+/* box runt logon */
+.team-box{
+  width:155px;
+  height:155px;
+  background:url("Assets/team-bg.png") no-repeat center/cover;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* själva logon */
+.team-box img{
+  max-width:90px;
+  max-height:90px;
+  object-fit:contain;
+}
+
+#team1logo,
+#team2logo,
+#tournamentLogo {
+  opacity:0;
+  transition:opacity .35s ease;
+}
+
+/* vs/resultat */
+#vsBox{
+  color:white;
+  font-family: "novecento-sans-condensed", sans-serif;
+  font-size:64px;
+  font-weight:700;
+  text-transform: lowercase;
+  width: 120px;          /* testa 140–180px om du vill */
+  text-align: center;
+  white-space: nowrap;   /* så resultatet inte radbryts */
+  flex-shrink: 0;        /* krymper inte i flex-layouen */
+}
+
+#tournament-box{
+  position:absolute;
+  top:60px;
+  right:25px;
+  width:310px;
+  height:230px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#tournament-box img{
+  max-width:310px;
+  max-height:230px;
+  object-fit:contain;
+}
+
+/* LOCAL TIME */
+#localtime-box{
+  position:absolute;
+  bottom:20px;
+  right:20px;
+  width:330px;
+  height:160px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+  font-family: "novecento-sans-condensed", sans-serif;
+}
+
+#local-bg{
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  object-fit:contain;
+}
+
+#local-time{
+  position:absolute;
+  bottom:30px;
+  left:0;
+  width:100%;
+  text-align:center;
+  font-size:64px;
+  font-family: "novecento-sans-condensed", sans-serif;
+  color:white;
+  font-weight:700;
+  letter-spacing:2px;
+}
+
+#localtime-label{
+  position:absolute;
+  top:30px;
+  left:0;
+  width:100%;
+  text-align:center;
+  font-size:26px;
+  font-family:Arial, sans-serif;
+  color:white;
+  letter-spacing:1px;
+}
+
+/* MATCHINFO */
+#matchinfo-box{
+  position:absolute;
+  bottom:60px;
+  left:550px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  line-height:1.05;
+  z-index:15;
+}
+
+#mi-names{
+  font-family: "novecento-sans-condensed", sans-serif;
+  font-size:42px;
+  font-weight:700;
+  color:white;
+  text-transform: lowercase;
+  margin-bottom:4px;
+}
+
+#mi-details{
+  font-family: "novecento-sans-condensed", sans-serif;
+  font-size:26px;
+  text-transform: lowercase;
+  opacity:0.90;
+  color:white;
+  margin-bottom:2px;
+}
+
+#mi-stage{
+  font-family: "novecento-sans-condensed", sans-serif;
+  font-size:26px;
+  text-transform: lowercase;
+  opacity:0.8;
+  color:white;
+}
+
+/* ADS / BILDSPEL */
+#ads-box {
+  position: absolute;
+  top: 350px;     /* justera vid behov */
+  right: 20px;    /* justera vid behov */
+  width: 310px;   /* samma som din turneringsruta */
+  height: 510px;  /* exempel */
+  overflow: hidden;
+  z-index: 12;
+}
+
+/* två bilder ovanpå varandra för crossfade */
+#ads-box .ads-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+</style>
+
+</head>
+<body>
+
+<img id="bg" src="Assets/background.png" />
+
+<!-- LOGOTYPER + VS -->
+<div id="teams-section">
+  <div class="team-box"><img id="team1logo" src="Assets/Placeholder.png"></div>
+  <div id="vsBox">VS</div>
+  <div class="team-box"><img id="team2logo" src="Assets/Placeholder.png"></div>
+</div>
+
+<!-- MATCHINFO -->
+<div id="matchinfo-box">
+  <div id="mi-names">Team1 vs Team2</div>
+  <div id="mi-details">Turnering – Format</div>
+  <div id="mi-stage">Runda</div>
+</div>
+
+<!-- TURNERINGSLOGGA -->
+<div id="tournament-box">
+  <img id="tournamentLogo" src="Assets/Placeholder.png">
+</div>
+
+<!-- ADS / BILDSPEL -->
+<div id="ads-box">
+  <img id="ads-img1" class="ads-img" src="">
+  <img id="ads-img2" class="ads-img" src="">
+</div>
+
+<!-- LOCAL TIME -->
+<div id="localtime-box">
+  <img src="Assets/local-bg.png" id="local-bg">
+  <span id="localtime-label">LOCAL TIME</span>
+  <span id="local-time">00:00</span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
+<script>
+////////////////////////////////////////////////////
+// SHEETS
+////////////////////////////////////////////////////
+const SHEET_BASE =
+  "https://docs.google.com/spreadsheets/d/1drao40xzdyDf8qvuszik466FaPFXEihqK_tNwUIP3Gw/gviz/tq?tqx=out:csv&sheet=";
+
+const CONTROL_URL = SHEET_BASE + "Kontrollpanel";
+const LOGOS_URL   = SHEET_BASE + "Logotabell";
+
+let logos = {};
+let prevLag1 = "";
+let prevLag2 = "";
+let prevTournament = "";
+
+// Ladda logotabell EN gång
+function loadLogos(){
+  Papa.parse(LOGOS_URL + "&cachebust=" + Date.now(), {
+    download:true,
+    header:true,
+    complete:res=>{
+      logos = {};
+      res.data.forEach(r=>{
+        if (r["Lag"] && r["Logo"]) {
+          logos[r["Lag"].trim().toLowerCase()] = r["Logo"].trim();
+        }
+      });
+      loadControl();
+    }
+  });
+}
+
+
+// Hjälpfunktion: uppdatera en logo med fade, men bara när det behövs
+function setLogo(imgId, key){
+  const img = document.getElementById(imgId);
+  if (!img) return;
+
+  const normalizedKey = (key || "").trim().toLowerCase();
+  const newSrc = logos[normalizedKey] || "Assets/Placeholder.png";
+
+  // Om src redan är rätt -> gör ingenting (undvik blink/flicker)
+  if (img.src.endsWith(newSrc)) return;
+
+  img.style.opacity = 0;
+  img.onload = () => { img.style.opacity = 1; };
+  img.src = newSrc;
+}
+
+function loadControl(){
+  Papa.parse(CONTROL_URL + "&cachebust=" + Date.now(), {
+    download:true,
+    header:true,
+    complete:res=>{
+      const row = res.data[0];
+      if (!row) return;
+
+      const lag1       = row["Lag1"]?.trim() || "";
+      const lag2       = row["Lag2"]?.trim() || "";
+      const result     = row["Resultat"]?.trim() || "";
+      const tournament = row["Turnering"]?.trim() || "";
+      const runda      = row["Runda"]?.trim() || "";
+      const format     = row["Format"]?.trim() || "";
+
+      // LOGOS – uppdatera bara när namnen ändrats
+      if (lag1 !== prevLag1) {
+        setLogo("team1logo", lag1);
+        prevLag1 = lag1;
+      }
+      if (lag2 !== prevLag2) {
+        setLogo("team2logo", lag2);
+        prevLag2 = lag2;
+      }
+      if (tournament !== prevTournament && tournament) {
+        setLogo("tournamentLogo", tournament);
+        prevTournament = tournament;
+      }
+
+      // RESULT / VS
+      const vsEl = document.getElementById("vsBox");
+      vsEl.textContent = result !== "" ? result : "VS";
+
+      // MATCHINFO TEXT
+      document.getElementById("mi-names").textContent   = `${lag1} vs ${lag2}`;
+      document.getElementById("mi-details").textContent = tournament;
+      document.getElementById("mi-stage").textContent   = `${runda} – ${format}`;
+    }
+  });
+}
+
+////////////////////////////////////////////////////
+// ADS – CROSSFADE
+////////////////////////////////////////////////////
+const ads = [
+  "Assets/Fractal.png",
+  "Assets/Inet-Black Friday.png",
+  "Assets/Inet-Scape.png",
+  "Assets/JS-Esplay.png",
+  "Assets/JS-Shop.png"
+];
+
+let adIndex   = 0;  // nästa bild i listan
+let currentImg = 1; // 1 eller 2 – vilken img som syns nu
+
+function initAds() {
+  const img1 = document.getElementById("ads-img1");
+  const img2 = document.getElementById("ads-img2");
+
+  if (!ads.length) return;
+
+  // första bilden
+  img1.src = ads[0];
+  img1.style.opacity = 1;
+  img2.style.opacity = 0;
+
+  adIndex = 1; // nästa index
+  setInterval(crossfadeAd, 6000); // byt var 6:e sekund
+}
+
+function crossfadeAd() {
+  const img1 = document.getElementById("ads-img1");
+  const img2 = document.getElementById("ads-img2");
+
+  const showing = currentImg === 1 ? img1 : img2;
+  const hidden  = currentImg === 1 ? img2 : img1;
+
+  const nextSrc = ads[adIndex];
+
+  hidden.onload = () => {
+    // när nästa bild laddats klart → crossfade
+    showing.style.opacity = 0;
+    hidden.style.opacity  = 1;
+
+    currentImg = currentImg === 1 ? 2 : 1;
+    adIndex    = (adIndex + 1) % ads.length;
+  };
+
+  hidden.src = nextSrc;
+}
+
+////////////////////////////////////////////////////
+// LOCAL TIME
+////////////////////////////////////////////////////
+function updateTime(){
+  const now   = new Date();
+  const hours = now.getHours().toString().padStart(2, "0");
+  const mins  = now.getMinutes().toString().padStart(2, "0");
+  document.getElementById("local-time").textContent = `${hours}:${mins}`;
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+
+////////////////////////////////////////////////////
+// START
+////////////////////////////////////////////////////
+loadLogos();               // ladda logotabell EN gång
+setInterval(loadControl, 5000); // uppdatera text/loggval var 5:e sekund
+initAds();                 // starta bildspelet
+</script>
+
+
+</body>
+</html>
