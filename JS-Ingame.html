@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>JS In-Game Banner</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 1920px;
+      height: 1080px;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    /* Wrapper för hela sidan */
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+    }
+
+    /* Banner-container nere i mitten */
+    #banner-box {
+      position: absolute;
+      bottom: 40px;         /* avstånd från nederkant – justera vid behov */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 411px;
+      height: 91px;
+      overflow: hidden;
+    }
+
+    /* Två bilder ovanpå varandra för crossfade */
+    .banner-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 411px;
+      height: 91px;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div id="banner-box">
+      <img id="banner1" class="banner-img" src="">
+      <img id="banner2" class="banner-img" src="">
+    </div>
+  </div>
+
+  <script>
+    // Lista på dina banners i Assets-mappen
+    const banners = [
+      "Assets/Inet.png",
+      "Assets/Fractal.png",
+      "Assets/inet-fractal.png"
+    ];
+
+    let currentIndex = 0;   // vilken banner i listan som är näst på tur
+    let currentImg   = 1;   // 1 eller 2 – vilken <img> som syns just nu
+
+    function initBanner() {
+      const img1 = document.getElementById("banner1");
+      const img2 = document.getElementById("banner2");
+
+      if (!banners.length) return;
+
+      // Första bilden
+      img1.src = banners[0];
+      img1.style.opacity = 1;
+      img2.style.opacity = 0;
+
+      currentIndex = 1;  // nästa som ska laddas är index 1
+
+      // Byt banner var 6:e sekund (ändra tiden här om du vill)
+      setInterval(cycleBanner, 6000);
+    }
+
+    function cycleBanner() {
+      const img1 = document.getElementById("banner1");
+      const img2 = document.getElementById("banner2");
+
+      const showing = currentImg === 1 ? img1 : img2;
+      const hidden  = currentImg === 1 ? img2 : img1;
+
+      const nextSrc = banners[currentIndex];
+
+      hidden.onload = () => {
+        // när den nya bilden har laddat: crossfade
+        showing.style.opacity = 0;
+        hidden.style.opacity  = 1;
+
+        currentImg   = currentImg === 1 ? 2 : 1;
+        currentIndex = (currentIndex + 1) % banners.length;
+      };
+
+      hidden.src = nextSrc;
+    }
+
+    initBanner();
+  </script>
+</body>
+</html>
